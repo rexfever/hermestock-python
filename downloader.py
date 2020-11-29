@@ -45,4 +45,3 @@ def _select_market(markets, driver):
         _select_buyer(selected_element, BUYERS, DRIVER)
 
 
-s
