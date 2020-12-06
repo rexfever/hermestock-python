@@ -48,3 +48,5 @@ def _select_market(markets, driver):
 
 _set_date(DRIVER)
 _select_market(MARKETS, DRIVER)
+
+
