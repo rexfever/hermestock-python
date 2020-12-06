@@ -4,17 +4,17 @@ from selenium.webdriver.support.select import Select
 from datetime import datetime
 
 '''
-1. 목적페이지 이동 (function화)
-2. 날짜 세팅 
-3. 시장 선택 (function화)
+1. 목적페이지 이동 
+2. 날짜 및 검색항목 설정 
+3. 시장 선택 
 4. 투자자 선택 후 다운로드(function화)
-4. 시장 수만큼 3번째 항 반복
+5. 시장 수만큼 3,4번째 항 반복
 '''
 DRIVER = webdriver.Chrome('./chromedriver')
 
 # 시장, 매수주체 선언
 MARKETS = [['3', 'kospi'], ['5', 'kosdaq']]
-BUYERS = [['7050', 'KIK'], ['6000', 'YEON'], ['9000', 'FO']]
+BUYERS = [['7050', 'KIK'], ['9000', 'FO']]
 
 
 # 날짜 및 검색 항목 설정
@@ -45,8 +45,7 @@ def _select_market(markets, driver):
         selected_element = Select(driver.find_element_by_id(select_element_id))
         _select_buyer(selected_element, BUYERS, driver)
 
-
+'''
 _set_date(DRIVER)
 _select_market(MARKETS, DRIVER)
-
-
+'''
