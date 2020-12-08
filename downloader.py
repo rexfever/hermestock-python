@@ -27,6 +27,7 @@ def _set_date(driver):
     target_date.clear()
     target_date.send_keys(datetime.now().strftime('%Y%m%d'))
 
+
 # 매수 주체 선택 후 다운로드
 def _select_buyer(element, buyers, driver):
     for buyer in buyers:
@@ -38,14 +39,13 @@ def _select_buyer(element, buyers, driver):
 
 
 # 시장 선택
-def _select_market(markets, driver):
+def _select_market(markets, buyers, driver):
     for market in markets:
         driver.find_element_by_css_selector(f'.design-fieldset > form > dl > dd > input:nth-child({market[0]})').click()
         select_element_id = driver.find_element_by_name('var_invr_cd').get_attribute("id")
         selected_element = Select(driver.find_element_by_id(select_element_id))
-        _select_buyer(selected_element, BUYERS, driver)
+        _select_buyer(selected_element, buyers, driver)
 
-'''
+
 _set_date(DRIVER)
-_select_market(MARKETS, DRIVER)
-'''
+_select_market(MARKETS, BUYERS, DRIVER)
