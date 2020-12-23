@@ -26,6 +26,7 @@ def _set_date():
     target_date = DRIVER.find_element_by_name('schdate')
     target_date.clear()
     target_date.send_keys(datetime.now().strftime('%Y%m%d'))
+    #target_date.send_keys(datetime.now().strftime('20201210'))
 
 
 # 매수 주체 선택 후 다운로드
@@ -46,3 +47,6 @@ def _select_market():
         selected_element = Select(DRIVER.find_element_by_id(select_element_id))
         _select_buyer(selected_element)
 
+
+def close_window():
+    DRIVER.close()

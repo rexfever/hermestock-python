@@ -23,6 +23,7 @@ def _extract_data_set(file):
 
 def _merge_data_set(dataset1, dataset2):
     dataset = pd.merge(dataset1.head(10), dataset2.head(10), how='inner', on='종목명')
+    print(dataset)
     dataset['순매수거래대금'] = dataset['순매수거래대금_x'] + dataset['순매수거래대금_y']
     dataset = dataset.sort_values('순매수거래대금', ascending=False)
     dataset = dataset[["종목명", "순매수거래대금"]]
