@@ -2,6 +2,7 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
 from datetime import datetime
+import os
 
 '''
 1. 목적페이지 이동 
@@ -26,7 +27,7 @@ def _set_date():
     target_date = DRIVER.find_element_by_name('schdate')
     target_date.clear()
     target_date.send_keys(datetime.now().strftime('%Y%m%d'))
-    #target_date.send_keys(datetime.now().strftime('20201210'))
+    #target_date.send_keys(datetime.now().strftime('20201228'))
 
 
 # 매수 주체 선택 후 다운로드
@@ -47,6 +48,22 @@ def _select_market():
         selected_element = Select(DRIVER.find_element_by_id(select_element_id))
         _select_buyer(selected_element)
 
+
+# 매수 주체 선택 후 다운로드
+def _select_buyer(element, buyer):
+    element.select_by_value(buyer)
+    DRIVER.find_element_by_class_name('btn-board.btn-board-search').click()
+    sleep(3)
+    excel_button = DRIVER.find_element_by_xpath("//*[contains(text(), 'CSV')]")
+    excel_button.click()
+
+
+# 시장 선택
+def _select_market(data_source):
+    DRIVER.find_element_by_css_selector(f'.design-fieldset > form > dl > dd > input:nth-child({data_source[0]})').click()
+    select_element_id = DRIVER.find_element_by_name('var_invr_cd').get_attribute("id")
+    selected_element = Select(DRIVER.find_element_by_id(select_element_id))
+    _select_buyer(selected_element, data_source[1])
 
 def close_window():
     DRIVER.close()

@@ -1,5 +1,5 @@
 import pandas as pd
-import getpass
+import getpass, os
 
 '''
 
@@ -12,6 +12,10 @@ import getpass
 # 데이터 파일 읽기 KOSPI 기관, KOSPI 외인, KOSDAQ 기관, KOSDAQ 외인
 filePath = '/Users/'+getpass.getuser()+'/Downloads/'
 
+def _count_file():
+    file_list = os.listdir(filePath)
+    file_list = [file for file in file_list if file.endswith(".csv")]
+    return len(file_list)
 
 def _extract_data_set(file):
     dataset = pd.read_csv(filePath + file, thousands=',')
