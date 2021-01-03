@@ -1,23 +1,36 @@
 import downloader as dl
 from time import sleep
 import calc_rank as cr
-import os
-import glob
+import os, glob
 import getpass
 
 
-
+DATA_SOURCE = [['3', '7050'], ['3', '9000'], ['5', '7050'], ['5', '9000']]
 KOSPI_fileList = ['data.csv', 'data (1).csv']
 KOSDAQ_fileList = ['data (2).csv', 'data (3).csv']
 
+try:
+    dl._set_date()
+    while cr._count_file() < 4:
+        sleep(10)
+        if cr._count_file() == 0:
+            dl._select_market(DATA_SOURCE[0])
+        elif cr._count_file() == 1:
+            dl._select_market(DATA_SOURCE[1])
+        elif cr._count_file() == 2:
+            dl._select_market(DATA_SOURCE[2])
+        elif cr._count_file() == 3:
+            dl._select_market(DATA_SOURCE[3])
+        else:
+            continue
 
-dl._set_date()
-dl._select_market()
-sleep(15)
+    sleep(15)
 
-print(cr._merge_data_set(cr._extract_data_set(KOSPI_fileList[0]), cr._extract_data_set(KOSPI_fileList[1])))
-print(cr._merge_data_set(cr._extract_data_set(KOSDAQ_fileList[0]), cr._extract_data_set(KOSDAQ_fileList[1])))
-dl.close_window()
-
-[os.remove(f) for f in glob.glob("/Users/"+getpass.getuser()+"/Downloads/*.csv")]
+    print(cr._merge_data_set(cr._extract_data_set(KOSPI_fileList[0]), cr._extract_data_set(KOSPI_fileList[1])))
+    print(cr._merge_data_set(cr._extract_data_set(KOSDAQ_fileList[0]), cr._extract_data_set(KOSDAQ_fileList[1])))
+except:
+    print("오류 발생")
+finally:
+    dl.close_window()
+    [os.remove(f) for f in glob.glob("/Users/" + getpass.getuser() + "/Downloads/*.csv")]
 
