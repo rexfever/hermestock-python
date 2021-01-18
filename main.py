@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 import downloader as dl
+import send_msg as sm
 from time import sleep
 import calc_rank as cr
 import os, glob
@@ -26,8 +28,10 @@ try:
 
     sleep(15)
 
-    print(cr._merge_data_set(cr._extract_data_set(KOSPI_fileList[0]), cr._extract_data_set(KOSPI_fileList[1])))
-    print(cr._merge_data_set(cr._extract_data_set(KOSDAQ_fileList[0]), cr._extract_data_set(KOSDAQ_fileList[1])))
+    rank_1 = cr._merge_data_set(cr._extract_data_set(KOSPI_fileList[0]), cr._extract_data_set(KOSPI_fileList[1]))
+    sm.send_message_to_slack(rank_1.to_string())
+    rank_2 = cr._merge_data_set(cr._extract_data_set(KOSDAQ_fileList[0]), cr._extract_data_set(KOSDAQ_fileList[1]))
+    sm.send_message_to_slack(rank_2.to_string())
 except:
     print("오류 발생")
 finally:

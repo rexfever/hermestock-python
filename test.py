@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
 import calc_rank as cr
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
 from datetime import datetime
 import os, glob, getpass
+import requests
 
 DRIVER = webdriver.Chrome('./chromedriver')
 FILEPATH = cr.filePath
@@ -14,7 +16,13 @@ DATA_SOURCE = [['3', '7050'], ['3', '9000'], ['5', '7050'], ['5', '9000']]
 KOSPI_fileList = ['data.csv', 'data (1).csv']
 KOSDAQ_fileList = ['data (2).csv', 'data (3).csv']
 
-
+CHANNEL_LIST = ["https://hooks.slack.com/services/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", "https://hooks.slack.com/services/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"]
+#CHANNEL_LIST = ["https://hooks.slack.com/services/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"] #양인석 웹훅
+def send_message_to_slack(text):
+    for channel in CHANNEL_LIST:
+        url = channel
+        payload = { "text" : text }
+        requests.post(url, json=payload)
 
 # 날짜 및 검색 항목 설정
 def _set_date():
@@ -24,8 +32,8 @@ def _set_date():
         f'.design-fieldset > form > dl:nth-of-type(4) > dd > input:nth-child(3)').click()
     target_date = DRIVER.find_element_by_name('schdate')
     target_date.clear()
-    target_date.send_keys(datetime.now().strftime('%Y%m%d'))
-    #target_date.send_keys(datetime.now().strftime('20201224'))
+    #target_date.send_keys(datetime.now().strftime('%Y%m%d'))
+    target_date.send_keys(datetime.now().strftime('20201224'))
 
 
 # 매수 주체 선택 후 다운로드
@@ -54,7 +62,9 @@ def _count_file():
 def close_window():
     DRIVER.close()
 
+
 try:
+
     _set_date()
     while _count_file() < 4:
         sleep(10)
@@ -78,8 +88,13 @@ try:
             print("file", _count_file())
             continue
 
-    print(cr._merge_data_set(cr._extract_data_set(KOSPI_fileList[0]), cr._extract_data_set(KOSPI_fileList[1])))
-    print(cr._merge_data_set(cr._extract_data_set(KOSDAQ_fileList[0]), cr._extract_data_set(KOSDAQ_fileList[1])))
+    rank_1 = cr._merge_data_set(cr._extract_data_set(KOSPI_fileList[0]), cr._extract_data_set(KOSPI_fileList[1]))
+    print(rank_1)
+    send_message_to_slack(rank_1.to_string())
+    rank_2 = cr._merge_data_set(cr._extract_data_set(KOSDAQ_fileList[0]), cr._extract_data_set(KOSDAQ_fileList[1]))
+    print(rank_2)
+    send_message_to_slack(rank_2.to_string())
+
 finally:
     close_window()
     [os.remove(f) for f in glob.glob("/Users/"+getpass.getuser()+"/Downloads/*.csv")]
