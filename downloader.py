@@ -23,8 +23,8 @@ BUYERS = [['7050', 'KIK'], ['9000', 'FO']]
 def _set_date():
     DRIVER.get('http://data.krx.co.kr/contents/MDC/MDI/mdiLoader/index.cmd?menuId=MDC0201020303')
     sleep(5)
-    target_sdate = DRIVER.find_element_by_name('#strtDd')
-    target_edate = DRIVER.find_element_by_name('#endDd')
+    target_sdate = DRIVER.find_element_by_name('strtDd')
+    target_edate = DRIVER.find_element_by_name('endDd')
     target_sdate.clear()
     target_edate.clear()
     target_sdate.send_keys(datetime.now().strftime('%Y%m%d'))
