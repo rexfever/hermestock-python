@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
@@ -22,8 +23,7 @@ BUYERS = [['7050', 'KIK'], ['9000', 'FO']]
 def _set_date():
     DRIVER.get('http://marketdata.krx.co.kr/mdi#document=040404')
     sleep(5)
-    DRIVER.find_element_by_css_selector(
-        f'.design-fieldset > form > dl:nth-of-type(4) > dd > input:nth-child(3)').click()
+    DRIVER.find_element_by_css_selector(f'.design-fieldset > form > dl:nth-of-type(4) > dd > input:nth-child(3)').click()
     target_date = DRIVER.find_element_by_name('schdate')
     target_date.clear()
     target_date.send_keys(datetime.now().strftime('%Y%m%d'))
