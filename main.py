@@ -7,13 +7,13 @@ import os, glob
 import getpass
 
 
-DATA_SOURCE = [['3', '7050'], ['3', '9000'], ['5', '7050'], ['5', '9000']]
-KOSPI_fileList = ['data.csv', 'data (1).csv']
-KOSDAQ_fileList = ['data (2).csv', 'data (3).csv']
+DATA_SOURCE = [['4', '7050'], ['4', '9000'], ['6', '7050'], ['6', '9000']]
+KOSPI_fileList = ['data_0.csv', 'data_1.csv']
+KOSDAQ_fileList = ['data_2.csv', 'data_3.csv']
 
-try:
-    dl._set_date()
-    while cr._count_file() < 4:
+#try:
+dl._set_date()
+while cr._count_file() < 4:
         sleep(10)
         if cr._count_file() == 0:
             dl._select_market(DATA_SOURCE[0])
@@ -26,15 +26,15 @@ try:
         else:
             continue
 
-    sleep(15)
+#    sleep(15)
 
-    rank_1 = cr._merge_data_set(cr._extract_data_set(KOSPI_fileList[0]), cr._extract_data_set(KOSPI_fileList[1]))
-    sm.send_message_to_slack(rank_1.to_string())
-    rank_2 = cr._merge_data_set(cr._extract_data_set(KOSDAQ_fileList[0]), cr._extract_data_set(KOSDAQ_fileList[1]))
-    sm.send_message_to_slack(rank_2.to_string())
-except:
-    print("오류 발생")
-finally:
-    dl.close_window()
-    [os.remove(f) for f in glob.glob("/Users/" + getpass.getuser() + "/Downloads/*.csv")]
+#    rank_1 = cr._merge_data_set(cr._extract_data_set(KOSPI_fileList[0]), cr._extract_data_set(KOSPI_fileList[1]))
+#    sm.send_message_to_slack(rank_1.to_string())
+#    rank_2 = cr._merge_data_set(cr._extract_data_set(KOSDAQ_fileList[0]), cr._extract_data_set(KOSDAQ_fileList[1]))
+#    sm.send_message_to_slack(rank_2.to_string())
+#except:
+#    print("오류 발생")
+#finally:
+#    dl.close_window()
+#    [os.remove(f) for f in glob.glob("/Users/" + getpass.getuser() + "/Downloads/*.csv")]
 

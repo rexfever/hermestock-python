@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import calc_rank as cr
+import downloader as dl
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
@@ -13,10 +14,11 @@ FILEPATH = cr.filePath
 
 DATA_SOURCE = [['4', '7050'], ['4', '9000'], ['6', '7050'], ['6', '9000']]
 
-KOSPI_fileList = ['data.csv', 'data (1).csv']
-KOSDAQ_fileList = ['data (2).csv', 'data (3).csv']
+KOSPI_fileList = ['data_0.csv', 'data_1.csv']
+KOSDAQ_fileList = ['data_2.csv', 'data_3.csv']
 
-CHANNEL_LIST = ["https://hooks.slack.com/services/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", "https://hooks.slack.com/services/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"]
+CHANNEL_LIST = ["https://hooks.slack.com/services/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"]
+
 #CHANNEL_LIST = ["https://hooks.slack.com/services/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"] #양인석 웹훅
 def send_message_to_slack(text):
     for channel in CHANNEL_LIST:
@@ -32,10 +34,10 @@ def _set_date():
     target_edate = DRIVER.find_element_by_name('endDd')
     target_sdate.clear()
     target_edate.clear()
-    target_sdate.send_keys(datetime.now().strftime('%Y%m%d'))
-    target_edate.send_keys(datetime.now().strftime('%Y%m%d'))
-    #target_sdate.send_keys(datetime.now().strftime('20201228'))
-    #target_edate.send_keys(datetime.now().strftime('20201228'))
+    #target_sdate.send_keys(datetime.now().strftime('%Y%m%d'))
+    #target_edate.send_keys(datetime.now().strftime('%Y%m%d'))
+    target_sdate.send_keys(datetime.now().strftime('20201228'))
+    target_edate.send_keys(datetime.now().strftime('20201228'))
 
 
 # 매수 주체 선택 후 다운로드
@@ -67,34 +69,33 @@ def _count_file():
 def close_window():
     DRIVER.close()
 
-_set_date()
-_select_market(DATA_SOURCE[0])
-'''
+
 try:
 
-    _set_date()
-    while _count_file() < 4:
+    dl._set_date()
+    while cr._count_file() < 4:
         sleep(10)
-        if _count_file() == 0:
-            print("file", _count_file())
-            _select_market(DATA_SOURCE[0])
+        if cr._count_file() == 0:
+            print("file", cr._count_file())
+            dl._select_market(DATA_SOURCE[0])
             print(DATA_SOURCE[0])
-        elif _count_file() == 1:
-            print("file", _count_file())
-            _select_market(DATA_SOURCE[1])
+        elif cr._count_file() == 1:
+            print("file", cr._count_file())
+            dl._select_market(DATA_SOURCE[1])
             print(DATA_SOURCE[1])
-        elif _count_file() == 2:
-            print("file", _count_file())
-            _select_market(DATA_SOURCE[2])
+        elif cr._count_file() == 2:
+            print("file", cr._count_file())
+            dl._select_market(DATA_SOURCE[2])
             print(DATA_SOURCE[2])
-        elif _count_file() == 3:
-            print("file", _count_file())
-            _select_market(DATA_SOURCE[3])
+        elif cr._count_file() == 3:
+            print("file", cr._count_file())
+            dl._select_market(DATA_SOURCE[3])
             print(DATA_SOURCE[3])
         else:
-            print("file", _count_file())
+            print("file", cr._count_file())
             continue
 
+    cr._rename_file()
     rank_1 = cr._merge_data_set(cr._extract_data_set(KOSPI_fileList[0]), cr._extract_data_set(KOSPI_fileList[1]))
     print(rank_1)
     send_message_to_slack(rank_1.to_string())
@@ -106,4 +107,3 @@ finally:
     close_window()
     [os.remove(f) for f in glob.glob("/Users/"+getpass.getuser()+"/Downloads/*.csv")]
 
-'''

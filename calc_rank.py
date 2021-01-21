@@ -12,25 +12,38 @@ import getpass, os
 5.1~4에 대해서 2(KOSPI, KOSDAQ)번 반복
 '''
 # 데이터 파일 읽기 KOSPI 기관, KOSPI 외인, KOSDAQ 기관, KOSDAQ 외인
-filePath = '/Users/'+getpass.getuser()+'/Downloads/'
+filePath = '/Users/' + getpass.getuser() + '/Downloads/'
+
 
 def _count_file():
     file_list = os.listdir(filePath)
     file_list = [file for file in file_list if file.endswith(".csv")]
     return len(file_list)
 
+
+def _rename_file():
+    file_list = os.listdir(filePath)
+    file_list = [file for file in file_list if file.endswith(".csv")]
+    file_list.sort(key=lambda s: os.path.getmtime(os.path.join(filePath, s)))
+    for idx, file in enumerate(file_list):
+        src = os.path.join(filePath, file)
+        dst = 'data_' + str(idx) + '.csv'
+        dst = os.path.join(filePath, dst)
+        os.rename(src, dst)
+
+
 def _extract_data_set(file):
-    dataset = pd.read_csv(filePath + file, thousands=',')
-    dataset = dataset[["종목명", "순매수거래대금"]]
-    dataset.astype({'순매수거래대금': 'int32'}).dtypes
-    dataset = dataset.sort_values('순매수거래대금', ascending=False)
+    dataset = pd.read_csv(filePath + file, thousands=',', encoding='cp949')
+    dataset = dataset[["종목명", "거래대금_순매수"]]
+    dataset.astype({'거래대금_순매수': 'int32'}).dtypes
+    dataset = dataset.sort_values('거래대금_순매수', ascending=False)
     return dataset
 
 
 def _merge_data_set(dataset1, dataset2):
     dataset = pd.merge(dataset1.head(10), dataset2.head(10), how='inner', on='종목명')
     sm.send_message_to_slack(dataset.to_string())
-    dataset['순매수거래대금'] = dataset['순매수거래대금_x'] + dataset['순매수거래대금_y']
-    dataset = dataset.sort_values('순매수거래대금', ascending=False)
-    dataset = dataset[["종목명", "순매수거래대금"]]
+    dataset['거래대금_순매수'] = dataset['거래대금_순매수_x'] + dataset['거래대금_순매수_y']
+    dataset = dataset.sort_values('거래대금_순매수', ascending=False)
+    dataset = dataset[["종목명", "거래대금_순매수"]]
     return dataset
