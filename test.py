@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import calc_rank as cr
-import downloader as dl
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
@@ -46,7 +45,7 @@ def _select_buyer(element, buyer):
     sleep(3)
     excel_button = DRIVER.find_element_by_xpath('//*[@id="MDCSTAT024_FORM"]/div[2]/div/p[2]/button[2]')
     excel_button.click()
-    csv_button = DRIVER.find_element_by_xpath('//*[@id="ui-id-1"]/div/div[2]/a')
+    csv_button = DRIVER.find_element_by_link_text('CSV')
     csv_button.click()
 
 
