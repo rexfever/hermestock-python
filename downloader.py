@@ -22,7 +22,7 @@ BUYERS = [['7050', 'KIK'], ['9000', 'FO']]
 # 날짜 및 검색 항목 설정
 def _set_date():
     DRIVER.get('http://data.krx.co.kr/contents/MDC/MDI/mdiLoader/index.cmd?menuId=MDC0201020303')
-    sleep(5)
+    sleep(3)
     target_sdate = DRIVER.find_element_by_name('strtDd')
     target_edate = DRIVER.find_element_by_name('endDd')
     target_sdate.clear()
