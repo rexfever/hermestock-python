@@ -27,10 +27,10 @@ def _set_date():
     target_edate = DRIVER.find_element_by_name('endDd')
     target_sdate.clear()
     target_edate.clear()
-    #target_sdate.send_keys(datetime.now().strftime('%Y%m%d'))
-    #target_edate.send_keys(datetime.now().strftime('%Y%m%d'))
-    target_sdate.send_keys(datetime.now().strftime('20201228'))
-    target_edate.send_keys(datetime.now().strftime('20201228'))
+    target_sdate.send_keys(datetime.now().strftime('%Y%m%d'))
+    target_edate.send_keys(datetime.now().strftime('%Y%m%d'))
+    #target_sdate.send_keys(datetime.now().strftime('20201228'))
+    #target_edate.send_keys(datetime.now().strftime('20201228'))
 
 
 # 매수 주체 선택 후 다운로드

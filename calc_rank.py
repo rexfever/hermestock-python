@@ -42,7 +42,7 @@ def _extract_data_set(file):
 
 def _merge_data_set(dataset1, dataset2,channels):
     dataset = pd.merge(dataset1.head(10), dataset2.head(10), how='inner', on='종목명')
-    sm.send_message_to_slack(dataset.to_string(),channels)
+    sm.send_message_to_slack(dataset.to_string(), channels)
     dataset['거래대금_순매수'] = dataset['거래대금_순매수_x'] + dataset['거래대금_순매수_y']
     print(dataset)
     dataset = dataset.sort_values('거래대금_순매수', ascending=False)
