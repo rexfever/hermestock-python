@@ -18,7 +18,6 @@ def send_message_to_slack(text, channels):
     for channel in channels:
         url = channel
         payload = {"text": text}
-        print(f"origin: {url[0]}")
         response = requests.post(url[0], json=payload)
         if response.status_code != 200:
             print(f'url[1]:{url[1]}')

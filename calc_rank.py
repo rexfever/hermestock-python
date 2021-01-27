@@ -2,6 +2,7 @@
 import pandas as pd
 import send_msg as sm
 import getpass, os
+import json
 
 '''
 
@@ -15,13 +16,13 @@ import getpass, os
 filePath = '/Users/' + getpass.getuser() + '/Downloads/'
 
 
-def _count_file():
+def count_file():
     file_list = os.listdir(filePath)
     file_list = [file for file in file_list if file.endswith(".csv")]
     return len(file_list)
 
 
-def _rename_file():
+def rename_file():
     file_list = os.listdir(filePath)
     file_list = [file for file in file_list if file.endswith(".csv")]
     file_list.sort(key=lambda s: os.path.getmtime(os.path.join(filePath, s)))
@@ -32,7 +33,7 @@ def _rename_file():
         os.rename(src, dst)
 
 
-def _extract_data_set(file):
+def extract_data_set(file):
     dataset = pd.read_csv(filePath + file, thousands=',', encoding='cp949')
     dataset = dataset[["종목명", "거래대금_순매수"]]
     dataset.astype({'거래대금_순매수': 'int32'}).dtypes
@@ -40,12 +41,40 @@ def _extract_data_set(file):
     return dataset
 
 
-def _merge_data_set(dataset1, dataset2,channels):
+def merge_data_set(dataset1, dataset2, channels):
     dataset = pd.merge(dataset1.head(10), dataset2.head(10), how='inner', on='종목명')
-    sm.send_message_to_slack(dataset.to_string(), channels)
+    #sm.send_message_to_slack(dataset.to_string(), channels)
     dataset['거래대금_순매수'] = dataset['거래대금_순매수_x'] + dataset['거래대금_순매수_y']
     print(dataset)
     dataset = dataset.sort_values('거래대금_순매수', ascending=False)
     dataset = dataset[["종목명", "거래대금_순매수"]]
     sm.send_message_to_slack(dataset.to_string(), channels)
     return dataset
+
+
+def read_channels(env):
+    config_path = './config.json'
+    if env != 'live':
+        config_path = './config_dev.json'
+
+    with open(config_path) as f:
+        config = json.load(f)
+    channels = []
+    for i in config['channels']:
+        channel = []
+        for j in i:
+            channel.append(i[j])
+        channels.append(channel)
+
+    return channels
+
+
+def read_date(env):
+    config_path = './config.json'
+    if env != 'live':
+        config_path = './config_dev.json'
+
+    with open(config_path) as f:
+        config = json.load(f)
+    date = config['date']
+    return date

@@ -20,17 +20,15 @@ BUYERS = [['7050', 'KIK'], ['9000', 'FO']]
 
 
 # 날짜 및 검색 항목 설정
-def _set_date():
+def set_date(date):
     DRIVER.get('http://data.krx.co.kr/contents/MDC/MDI/mdiLoader/index.cmd?menuId=MDC0201020303')
     sleep(3)
     target_sdate = DRIVER.find_element_by_name('strtDd')
     target_edate = DRIVER.find_element_by_name('endDd')
     target_sdate.clear()
     target_edate.clear()
-    target_sdate.send_keys(datetime.now().strftime('%Y%m%d'))
-    target_edate.send_keys(datetime.now().strftime('%Y%m%d'))
-    #target_sdate.send_keys(datetime.now().strftime('20201228'))
-    #target_edate.send_keys(datetime.now().strftime('20201228'))
+    target_sdate.send_keys(datetime.now().strftime(date))
+    target_edate.send_keys(datetime.now().strftime(date))
 
 
 # 매수 주체 선택 후 다운로드
@@ -59,16 +57,18 @@ def _select_buyer(element, buyer):
     sleep(3)
     excel_button = DRIVER.find_element_by_xpath('//*[@id="MDCSTAT024_FORM"]/div[2]/div/p[2]/button[2]')
     excel_button.click()
-    sleep(3)
+    sleep(1)
     csv_button = DRIVER.find_element_by_link_text('CSV')
     csv_button.click()
 
+
 # 시장 선택
-def _select_market(data_source):
+def select_market(data_source):
     DRIVER.find_element_by_css_selector(f'#MDCSTAT024_FORM > div.search_tb > div > table > tbody > tr:nth-child(1) > td > label:nth-child({data_source[0]})').click()
     select_element_id = DRIVER.find_element_by_name('invstTpCd').get_attribute("id")
     selected_element = Select(DRIVER.find_element_by_id(select_element_id))
     _select_buyer(selected_element, data_source[1])
+
 
 def close_window():
     DRIVER.close()
