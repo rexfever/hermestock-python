@@ -1,16 +1,29 @@
 # -*- coding: utf-8 -*-
 import requests
 
-CHANNEL_LIST = ["https://hooks.slack.com/services/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",
-                "https://hooks.slack.com/services/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",
-                "https://hooks.slack.com/services/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",
-                "https://hooks.slack.com/services/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"]
-
-#CHANNEL_LIST = ["https://hooks.slack.com/services/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"]
+MY_CHNNEL = "https://hooks.slack.com/services/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"
 
 
-def send_message_to_slack(text):
-    for channel in CHANNEL_LIST:
+def send_message_to_me(error):
+    url = MY_CHNNEL
+    payload = {"text": error}
+    response = requests.post(url, json=payload)
+    if response.status_code != 200:
+        raise ValueError(
+            f'슬랙메세지 전송 에러 코드 {response.status_code}, the response is:\n{response.text}'
+        )
+
+
+def send_message_to_slack(text, channels):
+    for channel in channels:
         url = channel
-        payload = { "text" : text }
-        requests.post(url, json=payload)
+        payload = {"text": text}
+        print(f"origin: {url[0]}")
+        response = requests.post(url[0], json=payload)
+        if response.status_code != 200:
+            print(f'url[1]:{url[1]}')
+            send_message_to_me(
+                f'**********************************\n{url[1]}에서 {response.text} 오류 발생\n**********************************')
+            raise ValueError(
+                f'{url[1]} Request to slack returned an error {response.status_code}, the response is:\n{response.text}'
+            )
