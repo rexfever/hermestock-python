@@ -72,3 +72,5 @@ def select_market(data_source):
 
 def close_window():
     DRIVER.close()
+
+

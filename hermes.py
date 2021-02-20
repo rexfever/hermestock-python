@@ -12,7 +12,7 @@ DATA_SOURCE = [['4', '7050'], ['4', '9000'], ['6', '7050'], ['6', '9000']]
 KOSPI_fileList = ['data_0.csv', 'data_1.csv']
 KOSDAQ_fileList = ['data_2.csv', 'data_3.csv']
 
-CHANNEL_LIST = cr.read_channels('live') #live or dev
+CHANNEL_LIST = cr.read_channels('live')  # live or dev
 date = cr.read_date('live')
 
 
@@ -44,6 +44,6 @@ def job():
         print(rank_2)
 
     finally:
-        dl.close_window()
+        #dl.close_window()
         [os.remove(f) for f in glob.glob("/Users/" + getpass.getuser() + "/Downloads/*.csv")]
 
