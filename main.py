@@ -47,3 +47,4 @@ def job():
         dl.close_window()
         [os.remove(f) for f in glob.glob("/Users/" + getpass.getuser() + "/Downloads/*.csv")]
 
+ 
