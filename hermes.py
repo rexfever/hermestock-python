@@ -12,15 +12,17 @@ DATA_SOURCE = [['4', '7050'], ['4', '9000'], ['6', '7050'], ['6', '9000']]
 KOSPI_fileList = ['data_0.csv', 'data_1.csv']
 KOSDAQ_fileList = ['data_2.csv', 'data_3.csv']
 
-CHANNEL_LIST = cr.read_channels('live')  # live or dev
-date = cr.read_date('live')
+CHANNEL_LIST = cr.read_channels('dev')  # live or dev
+date = cr.read_date('dev')
 
 
 def job():
     try:
+        print('setdate')
         dl.set_date(date)
         while cr.count_file() < 4:
             sleep(10)
+            print('select market')
             if cr.count_file() == 0:
                 dl.select_market(DATA_SOURCE[0])
             elif cr.count_file() == 1:
@@ -31,8 +33,10 @@ def job():
                 dl.select_market(DATA_SOURCE[3])
             else:
                 continue
+        print('rename files')
 
         sleep(1)
+        print('calc files')
         cr.rename_file()
         rank_1 = cr.merge_data_set(
             cr.extract_data_set(KOSPI_fileList[0]), cr.extract_data_set(KOSPI_fileList[1]), CHANNEL_LIST
@@ -45,5 +49,5 @@ def job():
 
     finally:
         #dl.close_window()
-        [os.remove(f) for f in glob.glob("/Users/" + getpass.getuser() + "/Downloads/*.csv")]
+        [os.remove(f) for f in glob.glob("/Users/rexsmac/workspace/projects/hermestock/*.csv")]
 

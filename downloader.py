@@ -12,7 +12,12 @@ import os
 4. 투자자 선택 후 다운로드(function화)
 5. 시장 수만큼 3,4번째 항 반복
 '''
-DRIVER = webdriver.Chrome('./chromedriver')
+
+webdriver_options = webdriver.ChromeOptions()
+webdriver_options.add_argument('headless')
+
+DRIVER = webdriver.Chrome('./chromedriver', options=webdriver_options)
+#DRIVER = webdriver.Chrome('./chromedriver')
 
 # 시장, 매수주체 선언
 MARKETS = [['4', 'kospi'], ['6', 'kosdaq']]
