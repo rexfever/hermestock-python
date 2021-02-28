@@ -49,5 +49,5 @@ def job():
 
     finally:
         #dl.close_window()
-        [os.remove(f) for f in glob.glob("/Users/rexsmac/workspace/projects/hermestock/*.csv")]
+        [os.remove(f) for f in glob.glob(os.getcwd()+"/*.csv")]
 
