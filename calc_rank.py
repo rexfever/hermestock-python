@@ -14,7 +14,7 @@ import json
 '''
 # 데이터 파일 읽기 KOSPI 기관, KOSPI 외인, KOSDAQ 기관, KOSDAQ 외인
 filePath = '/Users/' + getpass.getuser() + '/Downloads/'
-filePath = '/Users/rexsmac/workspace/projects/hermestock/'
+filePath = os.getcwd()+"/"
 
 
 def count_file():
